@@ -16,7 +16,8 @@ passport.deserializeUser((id, done) => User.findById(id).then(user => done(null,
 passport.use(new GoogleStrategy({
     clientID: googleClientID,
     clientSecret: googleClientSecret,
-    callbackURL: '/auth/google/callback'
+    callbackURL: '/auth/google/callback',
+    proxy: true // trust proxies to calculate call back url correctly from relative path
   }, (accessToken, refreshToken, profile, done) => {
     // once athenticated, check if the user already exists in our mongo db
     User.findOne({ googleId: profile.id })
