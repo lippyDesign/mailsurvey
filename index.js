@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
+const bodyParser = require('body-parser');
 
 // import mongo authentication string
 const { mongoURI, cookieKey } = require('./config/keys');
@@ -16,6 +17,9 @@ require('./services/passport');
 mongoose.connect(mongoURI);
 
 const app = express();
+
+// instruct express toparse body and assign in to req.body
+app.use(bodyParser.json());
 
 // tell express that it needs to use cookies middleware
 app.use(
@@ -33,6 +37,8 @@ app.use(passport.session());
 
 // will inject app object into authRoutes because authRoutes makes use of app
 require('./routes/authRoutes')(app);
+// will inject app object into billingRoutes because billingRoutes makes use of app
+require('./routes/billingRoutes')(app);
 
 // set PORT
 const PORT = process.env.PORT || 5000;

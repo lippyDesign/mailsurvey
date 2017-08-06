@@ -8,3 +8,10 @@ export const fetchUser = () => async dispatch => {
   const { data } = await axios.get('/api/current-user');
   dispatch({ type: FETCH_USER, payload: data })
 };
+
+// after credits get added to user model, the server will send us the updated user model,
+// so we just dispatch FETCH_USER type with the new data
+export const handleStripeToken = token => async dispatch => {
+  const { data } = await axios.post('/api/stripe', token);
+  dispatch({ type: FETCH_USER, payload: data })
+};
