@@ -11,7 +11,8 @@ class Header extends React.Component {
       case false: return <li><a href="/auth/google">Sign In with Google</a></li>;
       default: return [
         <li key='1'><Payments/ ></li>,
-        <li key='2'><a href="/api/logout">Sign Out</a></li>
+        <li style={{ margin: '0 10px' }} key='2'>Credits: {this.props.currentUser.credits}</li>,
+        <li key='3'><a href="/api/logout">Sign Out</a></li>
       ]
     }
   }
