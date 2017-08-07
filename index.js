@@ -40,6 +40,17 @@ require('./routes/authRoutes')(app);
 // will inject app object into billingRoutes because billingRoutes makes use of app
 require('./routes/billingRoutes')(app);
 
+// only run the following route in production because in development the client has its own server
+if (process.env.NODE_ENV === 'production') {
+  // Express will serve up production assets (i.e. main.js, main.css)
+  app.use(express.static('client/build'))
+  // Express will serve up index.html if it does not have the route in routes above
+  const path = require('path');
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
+
 // set PORT
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, console.log(`listening on port: ${PORT}`));
