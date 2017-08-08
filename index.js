@@ -18,7 +18,7 @@ mongoose.connect(mongoURI);
 
 const app = express();
 
-// instruct express to parse body and assign it to req.body
+// instruct express toparse body and assign in to req.body
 app.use(bodyParser.json());
 
 // tell express that it needs to use cookies middleware
