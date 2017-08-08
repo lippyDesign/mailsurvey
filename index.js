@@ -16,7 +16,7 @@ const bodyParser = require('body-parser');
 // // connect mongo to mongoose
 // mongoose.connect(mongoURI);
 
-// const app = express();
+const app = express();
 
 // // instruct express toparse body and assign in to req.body
 // app.use(bodyParser.json());
