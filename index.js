@@ -4,41 +4,41 @@ const cookieSession = require('cookie-session');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 
-// import mongo authentication string
-const { mongoURI, cookieKey } = require('./config/keys');
+// // import mongo authentication string
+// const { mongoURI, cookieKey } = require('./config/keys');
 
-// import User Model before importing passport
-require('./models/User');
+// // import User Model before importing passport
+// require('./models/User');
 
-// import all authentication (passport.js) code
-require('./services/passport');
+// // import all authentication (passport.js) code
+// require('./services/passport');
 
-// connect mongo to mongoose
-mongoose.connect(mongoURI);
+// // connect mongo to mongoose
+// mongoose.connect(mongoURI);
 
-const app = express();
+// const app = express();
 
-// instruct express toparse body and assign in to req.body
-app.use(bodyParser.json());
+// // instruct express toparse body and assign in to req.body
+// app.use(bodyParser.json());
 
-// tell express that it needs to use cookies middleware
-app.use(
-  cookieSession({
-    // how long a cookie can exist before expiring
-    maxAge: 30 * 24 * 60 * 60 * 1000, // (1 month)
-    // key is used to encrypt a cookie
-    keys: [cookieKey]
-  })
-);
+// // tell express that it needs to use cookies middleware
+// app.use(
+//   cookieSession({
+//     // how long a cookie can exist before expiring
+//     maxAge: 30 * 24 * 60 * 60 * 1000, // (1 month)
+//     // key is used to encrypt a cookie
+//     keys: [cookieKey]
+//   })
+// );
 
-// tell express that it needs to use passport middleware for auth
-app.use(passport.initialize());
-app.use(passport.session());
+// // tell express that it needs to use passport middleware for auth
+// app.use(passport.initialize());
+// app.use(passport.session());
 
-// will inject app object into authRoutes because authRoutes makes use of app
-require('./routes/authRoutes')(app);
-// will inject app object into billingRoutes because billingRoutes makes use of app
-require('./routes/billingRoutes')(app);
+// // will inject app object into authRoutes because authRoutes makes use of app
+// require('./routes/authRoutes')(app);
+// // will inject app object into billingRoutes because billingRoutes makes use of app
+// require('./routes/billingRoutes')(app);
 
 // only run the following route in production because in development the client has its own server
 if (process.env.NODE_ENV === 'production') {
