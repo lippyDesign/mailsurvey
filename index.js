@@ -7,8 +7,10 @@ const bodyParser = require('body-parser');
 // import mongo authentication string
 const { mongoURI, cookieKey } = require('./config/keys');
 
+// Models need to be imported somewhere in the app for them to be registered
 // import User Model before importing passport
 require('./models/User');
+require('./models/Survey');
 
 // import all authentication (passport.js) code
 require('./services/passport');
@@ -35,10 +37,11 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// will inject app object into authRoutes because authRoutes makes use of app
+// SERVER ROUTES
+// will inject app object into routes because routes make use of app
 require('./routes/authRoutes')(app);
-// will inject app object into billingRoutes because billingRoutes makes use of app
 require('./routes/billingRoutes')(app);
+require('./routes/surveyRoutes')(app);
 
 // only run the following route in production because in development the client has its own server
 if (process.env.NODE_ENV === 'production') {

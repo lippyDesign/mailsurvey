@@ -4,14 +4,13 @@ import { connect } from 'react-redux';
 // COMPONENTS
 import Header from './Header';
 import Landing from './Landing';
+import Dashboard from './Dashboard';
+import SurveyNew from './surveys/SurveyNew';
 // ACTIONS
 import { fetchUser } from '../actions';
 
-const Dashboard = () => <h2>Dashboard</h2>
-const SurveyNew = () => <h2>SurveyNew</h2>
-
 class App extends React.Component {
-  // we try to fetch user as soon as components mounts
+  // we try to fetch user as soon as components mounts (app loads)
   componentDidMount() {
     this.props.fetchUser();
   }
