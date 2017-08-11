@@ -15,3 +15,12 @@ export const handleStripeToken = token => async dispatch => {
   const { data } = await axios.post('/api/stripe', token);
   dispatch({ type: FETCH_USER, payload: data })
 };
+
+// make a post request to send out a new survey
+// the api returns updated user model, so we dispatch the FETCH_USER to send the updated user model to the reducers
+// also redirect user to the dashboard page
+export const submitSurvey = (values, history) => async dispatch => {
+  const { data } = await axios.post('/api/surveys', values);
+  history.push('/surveys');
+  dispatch({ type: FETCH_USER, payload: data });
+};

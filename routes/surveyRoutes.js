@@ -1,3 +1,6 @@
+const _ = require('lodash');
+const Path = require('path-parser');
+const { URL } = require('url');
 const mongoose = require('mongoose');
 const requireLogin = require('../middlewares/requireLogin');
 const requireCredits = require('../middlewares/requireCredits');
@@ -7,7 +10,7 @@ const surveyTemplate = require('../services/emailTemplates/surveyTemplate');
 const Survey = mongoose.model('surveys');
 
 module.exports = app => {
-  app.get('/api/surveys/thanks', (req, res) => {
+  app.get('/api/surveys/:surveyId/:choice', (req, res) => {
     res.send('Thank You for voting!');
   });
 
@@ -35,5 +38,36 @@ module.exports = app => {
     } catch(e) {
       res.status(422).send(err);
     }
+  });
+
+  // Sendgrid webhook. sendgrid will post to this route
+  // don't need async 
+  app.post('/api/surveys/webhooks', (req, res) => {
+    const p = new Path('/api/surveys/:surveyId/:choice');
+
+    _.chain(req.body)
+      // take response and build a list od objects with email survey id and the choice they made
+      .map(({ url, email }) => {
+        const match = p.test(new URL(url).pathname)
+        if (match) return { email, surveyId: match.surveyId, choice: match.choice }
+      })
+      .compact() // remove undefined elements
+      .unionBy('email', 'surveyId') // remove duplicates
+      .each(({ surveyId, email, choice }) => {
+        Survey.updateOne({
+          _id: surveyId,
+          recipients: {
+            $elemMatch: { email: email, responded: false }
+          }
+        },
+        {
+          $inc: { [choice]: 1 },
+          $set: { 'recipients.$.responded': true },
+          lastResponded: new Date()
+        }).exec();
+      })
+      .value() // retrieve result values
+
+    res.send({});
   });
 };
